@@ -1,0 +1,14 @@
+.slidesJq{position: relative;}
+.slidesJq ul,.slidesJq ol{list-style: none;}
+.slidesJq .myprev,.slidesJq .mynext{ display:none;line-height:60px;font-size:30px;text_decoration:none;position:absolute;
+    width:20px;height:60px;background-color:#666666;z-index:10;color:#ffffff;
+}
+.slidesJq .myprev:hover,.slidesJq .mynext:hover{text_decoration:none;}
+.slidesJq .myprev{ left:10px;}
+.slidesJq .mynext{ right:10px;}
+.slidesJq:hover .myprev, .slidesJq:hover .mynext{display:block;}
+
+.slidesJq .pagination{position:absolute;bottom:20px;z-index:10}
+.slidesJq .pagination>li{float:left;width:12px;height:12px;background-color:#666666;margin:5px;border:1px solid #444444;}
+.slidesJq .pagination>li.current{background-color:#ffffff;border:1px solid #dddddd;}
+.slidesJq .pagination>li>a{display:block;width:12px;height:12px;}
