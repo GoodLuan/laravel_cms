@@ -12,19 +12,19 @@
                 <td><span>所属组别：</span></td>
                 <!-- 搜索的name名必须和数据库中的字段名一致 -->
                 <td>
-                    <select class="form-control form-focus" name="group_id">
+                    <select class="form-control form-focus" name="role_id">
                         <option value="" selected>--请选择--</option>
                         @foreach($role as $r)
-                            <option value="{$r.id}">{{$r['name']}}</option>
+                            <option value="{{$r['id']}}">{{$r['name']}}</option>
                             @endforeach
                     </select>
                 </td>
                 <td><span>账号状态：</span></td>
                 <td>
-                    <select class="form-control form-focus" name="flag">
+                    <select class="form-control form-focus" name="is_open">
                         <option value="" selected>--请选择--</option>
-                        <option value="1">启用</option>
-                        <option value="0">禁用</option>
+                        <option value="0">启用</option>
+                        <option value="1">禁用</option>
                     </select>
                 </td>
             </tr>

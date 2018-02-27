@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: admin
- * Date: 2018/1/3
- * Time: 17:03
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
  */
 
 namespace App\Models\Admin;
@@ -27,22 +27,29 @@ class Menu extends Model
      * 查询列表
      */
     protected function getList($params=[]){
+        $where = array();
+        //查询条件
+        !empty($params['id'])      && $where['id'] = $params['id'];
+        isset($params['is_open'])  && $where['is_open'] = $params['is_open'];
+
+        //查询字段
+        $field = empty($params['field'])?'*':$params['field'];
+
          $data = self::where(function ($query)use($params) {
 
              if (isset($params['ids'])) {
                  if (!empty($params['ids']))$query->whereIn('id', $params['ids']);
-                 unset($params['ids']);
              }
 
              if (isset($params['level'])) {
                  if (!empty($params['level'])) $query->where('level', '<', $params['level']);
-                 unset($params['level']);
              }
 
-            if (isset($params))$query->where($params);
-        })->get();
+        })->where($where)
+             ->select($field)
+             ->get();
 
-         return json_decode(json_encode($data),true);
+         return $data;
     }
     /**
      * 查询详情

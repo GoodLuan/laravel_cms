@@ -1,8 +1,9 @@
 <?php
 /**
- * @Author: Peak
- * @Date:   2016-04-04 10:02:54
- * @Last Modified time: 2016-04-04 11:12:18
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
  */
 
 namespace App\Org\Util;

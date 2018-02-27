@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
+ */
 
 namespace App\Http\Controllers\Admin;
 
@@ -13,6 +19,17 @@ use App\Http\Controllers\Controller;
 class AuthController extends Controller
 {
 
+    //验证规则-查询
+    private $field_list = array(
+        'username'            => array('name'=>'帐号名称',   '_validate'=>'maxLength:50'),
+        'role_id'             => array('name'=>'角色ID',    '_validate'=>'isInt|maxLength:2'),
+        'is_open'             => array('name'=>'是否启动',   '_validate'=>'isInt|maxLength:2'),
+        'sort_field'          => array('name'=>'排序字段',   '_validate'=>'maxLength:255'),
+        'sort_order'          => array('name'=>'排序值',   '_validate'=>'maxLength:255'),
+
+        'page'                => array('name'=>'页码',   '_validate'=>'isInt|maxLength:11'),
+        'pagesize'            => array('name'=>'页数',   '_validate'=>'isInt|maxLength:11'),
+    );
     //验证规则-添加
     private $field_add = array(
         'username'            => array('name'=>'帐号名称',   '_validate'=>'require|isManagerName|maxLength:50'),
@@ -20,7 +37,7 @@ class AuthController extends Controller
         'phone'               => array('name'=>'手机号',     '_validate'=>'require|isMobilePhone|maxLength:11'),
         'password'            => array('name'=>'密码',      '_validate'=>'require|maxLength:255'),
         'email'               => array('name'=>'邮箱',      '_validate'=>'require|isEmail|maxLength:255'),
-        'role_id'             => array('name'=>'角色ID',    '_validate'=>'require|maxLength:2'),
+        'role_id'             => array('name'=>'角色ID',    '_validate'=>'require|isInt|maxLength:2'),
         'is_open'             => array('name'=>'是否启动',   '_validate'=>'isInt|maxLength:2'),
     );
 
@@ -55,16 +72,20 @@ class AuthController extends Controller
     public function anyLists()
     {
 
-        $where['show_all'] = 1;//查询全部
-        $auth = Auth::getList($where);
+        //验证
+        $r = Validate::validParams($_POST, $this->field_list);
+        if ($r !== true) return reError($r);
+
+        $auth = Auth::getList($_POST);
         $data['rows'] = $auth;
+
 
         $where['is_open'] = 0;//选择已开启的
         $where['show_all'] = 1;//查询全部
         $where['field'] = ['id','name'];//需要的字段名
         $role = Role::getList($where);
 
-        foreach ($role as $r)$data['role'][$r['id']] = $r;
+        foreach ($role as $r)$data['role'][$r->id] = $r;
 
         return view('admin.auth.lists',$data);
     }
@@ -95,7 +116,7 @@ class AuthController extends Controller
     }
 
     /**
-     *添加
+     *编辑
      */
     public function anyEdit()
     {
@@ -106,7 +127,7 @@ class AuthController extends Controller
             $where['field'] = ['id','name'];//需要的字段名
             $data['role'] = Role::getList($where);
             //详情
-            $data['detail'] = Auth::Detail(['id'=>$_POST['id']]);
+            $data['detail'] = json_decode(json_encode(Auth::Detail(['id'=>$_POST['id']])),true);
 
             return view('admin.auth.edit',$data);
         }
@@ -148,18 +169,18 @@ class AuthController extends Controller
             $data['uid'] = $_POST['id'];
             //获取用户详情
             $detail = Auth::Detail(['id'=>$data['uid']]);
-
             //获取用户组详情
-            $role = Role::Detail(['id'=>$detail['role_id']]);
+            $role = Role::Detail(['id'=>$detail->role_id]);
 
             //用户权限
-            $data['user'] = empty($detail['menu_id'])?[]:explode(',',$detail['menu_id']);
+            $data['user'] = empty($detail->menu_id)?[]:explode(',',$detail->menu_id);
             //角色权限
-            $data['role'] = empty($role['menu_id'])?[]:explode(',',$role['menu_id']);
+            $data['role'] = empty($role->menu_id)?[]:explode(',',$role->menu_id);
 
             //列表
             $where['flag'] = 0;//选择已开启的
             $data['menu'] = Menu::getList($where);
+            $data['menu'] = json_decode(json_encode($data['menu']),true);
             $data['menu'] = Arrays::listToTree($data['menu']);
 
             return view('admin.auth.permissions',$data);

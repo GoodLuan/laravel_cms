@@ -22,15 +22,15 @@
     <?php } else { ?>
     @foreach($rows as $vo)
         <tr>
-            <td>{{$vo['name']}}</td>
-            <td>{{$vo['remarks']}}</td>
+            <td>{{$vo->name}}</td>
+            <td>{{$vo->remarks}}</td>
             <td>
-                <button class="btn btn-info btn-mini" type="button" onclick="auth_role.edit({{$vo['id']}})">编辑</button>
+                <button class="btn btn-info btn-mini" type="button" onclick="auth_role.edit({{$vo->id}})">编辑</button>
 
                 <!--<button class="btn btn-info btn-mini" type="button" onclick="auth_role.del({$vo.id})">删除</button>-->
 
                 <button class="btn btn-warning btn-mini" type="button"
-                        onclick="auth_role.auth_list({{$vo['id']}},'{{$vo['name']}}')">授权
+                        onclick="auth_role.auth_list({{$vo->id}},'{{$vo->name}}')">授权
                 </button>
             </td>
         </tr>

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
+ */
 
 namespace App\Http\Controllers\Home;
 
@@ -33,9 +39,7 @@ class HomeController extends Controller
     );
 
     public function anyWelcome() {
-
-
-
+        dump('----------------------OK-----------------------');exit;
         //select 指定要操作的数据库
         Redis::select(2);
 
@@ -86,6 +90,7 @@ class HomeController extends Controller
         }else if (!empty($data['userInfo']['menu_id'])){
             $data['accesss'] = Menu::getList(['level'=>3,'ids' => explode(',',$data['userInfo']['menu_id'])]);
         }
+        $data['accesss'] = json_decode(json_encode($data['accesss']),true);
         $data['accesss'] = Arrays::listToTree($data['accesss']);
         return view('home.index.index',$data);
     }
@@ -116,7 +121,7 @@ class HomeController extends Controller
         $member['menu_id'] = implode(',',array_unique(array_filter(array_merge(explode(',',$role['menu_id']),explode(',',$member['menu_id'])))));
         //获取权限信息
         $params = ($member['id']==1)?[]:explode(',',$member['menu_id']);
-        $menu = Menu::getList(['ids'=>$params]);
+        $menu = json_decode(json_encode(Menu::getList(['ids'=>$params])),true);
         //添加默认路由(免权限验证)
         $menu = array_merge(array_filter(array_column($menu,'url')),config('setting')['DEFAULT_AUTH_URL']);
 
@@ -132,7 +137,7 @@ class HomeController extends Controller
 
 
     /**
-     * 退出
+     * 修改密码
      */
     public function anyEditpwd(){
 
@@ -193,7 +198,7 @@ class HomeController extends Controller
         $data = array(
             "user_id" => 0, # 网站用户id
             "client_type" => "web", #web:电脑上的浏览器；h5:手机上的浏览器，包括移动应用内完全内置的web_view；native：通过原生SDK植入APP应用的方式
-            "ip_address" => "127.0.0.1" # 请在此处传输用户请求验证时所携带的IP
+            "ip_address" => client_i # 请在此处传输用户请求验证时所携带的IP
         );
         return (new GeetestLib())->successValidate($request['geetest_challenge'], $request['geetest_validate'], $request['geetest_seccode'], $data);
     }

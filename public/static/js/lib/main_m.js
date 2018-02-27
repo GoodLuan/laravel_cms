@@ -103,7 +103,7 @@ $.postJ = function(url,data,fn,hideMsg) {
         else {
         	var json = $.isPlainObject(res)?res:$.parseJSON(res);
         	if(!!json.info && !hideMsg) { msgShow(json.info,json.status,!!data.msgOptions?data.msgOptions:{}); }
-            if(!!json.data && json.data=='need login') { location.href="/Home/Index/login"; }
+            if(!!json.data && json.data=='need login') { location.href="/"; }
             if(typeof fn=='function') fn(json);
         }
     });

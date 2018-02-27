@@ -1,11 +1,11 @@
 <?php
 /**
- * @Author: Peak
- * @Date:   2016-02-13 23:12:50
- * @Last Modified time: 2016-07-18 14:51:59
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
  * 访问内部API的类库
  */
-
 namespace Org\Net;
 
 class Api 

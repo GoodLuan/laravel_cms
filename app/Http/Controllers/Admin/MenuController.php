@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
+ */
 
 namespace App\Http\Controllers\Admin;
 
@@ -42,7 +48,9 @@ class MenuController extends Controller
      */
     public function anyLists()
     {
-        $menus = Arrays::listToTree(Menu::getList());
+        $data = Menu::getList();
+        $data = json_decode(json_encode($data),true);
+        $menus = Arrays::listToTree($data);
         return view('admin.menu.lists',['menus'=>$menus]);
     }
 
@@ -55,6 +63,7 @@ class MenuController extends Controller
         if (empty($_POST['dosubmit'])) {
             //列表
             $list = Menu::getList(['flag'=>0]);
+            $list = json_decode(json_encode($list),true);
             //转多维数组
             $menus = Arrays::listToTree($list);
             $pid = empty($_POST['pid'])?0:$_POST['pid'];
@@ -78,6 +87,7 @@ class MenuController extends Controller
         if (empty($_POST['dosubmit'])) {
             //列表
             $list = Menu::getList(['flag'=>0]);
+            $list = json_decode(json_encode($list),true);
             $data['menus'] = Arrays::listToTree($list);
             //详情
             $data['detail'] = Menu::Detail(['id'=>$_POST['id']]);

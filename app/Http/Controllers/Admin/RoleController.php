@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Jungle
+ * Date: 2018/2/23
+ * Time: 10:30
+ */
 
 namespace App\Http\Controllers\Admin;
 
@@ -40,9 +46,8 @@ class RoleController extends Controller
      */
     public function anyLists()
     {
-        $role = Role::getList();
-        $data['rows'] = $role['data'];
-        return view('admin.role.lists',$data);
+        $data = Role::getList();
+        return view('admin.role.lists',['rows'=>$data]);
     }
 
     /**
@@ -111,6 +116,7 @@ class RoleController extends Controller
             //列表
             $where['flag'] = 0;//选择已开启的
             $data['menu'] = Menu::getList($where);
+            $data['menu'] = json_decode(json_encode($data['menu']),true);
             $data['menu'] = Arrays::listToTree($data['menu']);
 
             return view('admin.role.permissions',$data);
